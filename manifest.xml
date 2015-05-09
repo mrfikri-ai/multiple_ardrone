@@ -1,0 +1,18 @@
+<package>
+  <description brief="multiple_ardrone_control">
+
+     Multiple_ardrone
+
+  </description>
+  <author>Alphaproxima</author>
+  <license>Github</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/multiple_Alphadrone</url>
+  <depend package="roscpp"/>
+  <depend package="std_msgs"/>
+  <depend package="sensor_msgs"/>
+  <depend package="tf"/>
+  <depend package="geometry_msgs"/>
+  <depend package="ardrone_autonomy"/>
+
+</package>
