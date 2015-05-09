@@ -1,4 +1,3 @@
 # multiple_ardrone
-multiple flying ardrone, from ardrone_autonomy and arl_ardrone_example for final assignment purpose
-Muhamad Rausyan Fikri
-Universitas Gadjah Mada
+multiple flying ardrone, a node based from ardrone_autonomy and arl_ardrone_examples
+
