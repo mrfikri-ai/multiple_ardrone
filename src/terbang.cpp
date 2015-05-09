@@ -9,7 +9,7 @@
  * Allowed to be modified and used widely for better program
  * Goal of this script to drive AR.Drone using controller or autonomously flying
  * For purpose of Multi-agent systems robot 2015
- * This program version 1.1.2
+ * This program version 1.0.0
 */
 
 #include <ros/ros.h>
