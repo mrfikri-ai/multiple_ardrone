@@ -17,6 +17,7 @@
 #include <cstdlib>
 #include <ardrone_autonomy/Navdata.h>
 #include <geometry_msgs/Twist.h>
+#include <iostream>
 
 using namespace std;
 
@@ -42,10 +43,10 @@ void nav_callback(const ardrone_autonomy::Navdata& msg_in)
 int main(int argc, char** argv)
 {
 
-	ROS_INFO("Flying ARdrone");
+	ROS_INFO("AR.Drone Terbang");
 	ros::init(argc, argv,"ARDrone_test");
-    ros::NodeHandle node;
-    ros::Rate loop_rate(50);
+    	ros::NodeHandle node;
+    	ros::Rate loop_rate(50);
 	ros::Publisher takeoff1; 
 	ros::Publisher takeoff2; 
 	ros::Publisher land1;
