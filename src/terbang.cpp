@@ -1,4 +1,4 @@
-/* This copyright programming script is belong to
+/* This copyright programming script for multiple AR.Drone simultaneously
  * Muhamad Rausyan Fikri (Author)
  * Electronics and Instrumentation 2011
  * Department of Computer Science and Electronics
