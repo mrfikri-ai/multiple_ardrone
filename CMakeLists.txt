@@ -8,6 +8,9 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  geometry_msgs
+  tf
+  ardrone_autonomy
 )
 
 ## System dependencies are found with CMake's conventions
@@ -103,18 +106,44 @@ include_directories(
 # )
 
 ## Declare a cpp executable
-#add_executable(skripsi_node src/broadcaster.cpp)
-#target_link_libraries(skripsi_node ${catkin_LIBRARIES})
-#add_dependencies(skripsi_node broadcaster_cpp)
+add_executable(takeoff src/takeoff.cpp)
+add_executable(landing src/landing.cpp)
+add_executable(resset src/reset.cpp)
+add_executable(terbang src/terbang.cpp)
+add_executable(lingkar src/lingkar.cpp)
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
 # add_dependencies(skripsi_node skripsi_generate_messages_cpp)
+add_dependencies(takeoff takeoff_cpp)
+add_dependencies(landing landing_cpp)
+add_dependencies(reset reset_cpp)
+add_dependencies(terbang terbang_cpp)
+add_dependencies(lingkar lingkar_cpp)
 
 ## Specify libraries to link a library or executable target against
 # target_link_libraries(skripsi_node
 #   ${catkin_LIBRARIES}
 # )
+  target_link_libraries(takeoff 
+    ${catkin_LIBRARIES}
+  )
+  
+  target_link_libraries(landing 
+    ${catkin_LIBRARIES}
+  )
+  
+  target_link_libraries(reset 
+    ${catkin_LIBRARIES}
+  )
+  
+  target_link_libraries(terbang 
+    ${catkin_LIBRARIES}
+  )
+
+  target_link_libraries(lingkar 
+    ${catkin_LIBRARIES}
+  )
 
 #############
 ## Install ##
