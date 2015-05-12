@@ -109,7 +109,7 @@ add_executable(terbang src/terbang.cpp)
 add_executable(takeoff src/takeoff.cpp)
 add_executable(landing src/landing.cpp)
 add_executable(lingkar src/lingkar.cpp)
-add_executable(fly src/fly.cpp)
+add_executable(maju_dan_mundur src/maju_dan_mundur.cpp)
 add_executable(reset src/reset.cpp)
 
 ## Add cmake target dependencies of the executable/library
@@ -119,7 +119,7 @@ add_dependencies(terbang terbang_cpp)
 add_dependencies(takeoff takeoff_cpp)
 add_dependencies(landing landing_cpp)
 add_dependencies(lingkar lingkar_cpp)
-add_dependencies(fly fly_cpp)
+add_dependencies(maju_dan_mundur maju_dan_mundur_cpp)
 add_dependencies(reset reset_cpp)
 
 ## Specify libraries to link a library or executable target against
@@ -130,7 +130,7 @@ target_link_libraries(terbang ${catkin_LIBRARIES})
 target_link_libraries(takeoff ${catkin_LIBRARIES})
 target_link_libraries(landing ${catkin_LIBRARIES})
 target_link_libraries(lingkar ${catkin_LIBRARIES})
-target_link_libraries(fly ${catkin_LIBRARIES})
+target_link_libraries(maju_dan_mundur ${catkin_LIBRARIES})
 target_link_libraries(reset ${catkin_LIBRARIES})
 
 #############
