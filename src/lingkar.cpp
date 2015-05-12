@@ -1,4 +1,4 @@
-/*  Program for takeoff with two ardrones
+/*  Program for takeoff between with ardrones
  *  Muhamad Rausyan Fikri - UGM 
  *
  *  Elins research group
@@ -8,129 +8,154 @@
 #include <ros/ros.h>
 #include <std_msgs/Empty.h>
 #include <geometry_msgs/Twist.h>
-#include <iostream>
-#include <cstdlib>
 
-using namespace std;
-
-std_msgs::Empty t, l;
-geometry_msgs::Twist h;
-geometry_msgs::Twist msg1,msg2;
-
+	geometry_msgs::Twist lurus;
+	geometry_msgs::Twist mundur;
+	geometry_msgs::Twist lingkar;
+	geometry_msgs::Twist lingkar_neg;
+	geometry_msgs::Twist hover;
+	geometry_msgs::Twist naik;
+	std_msgs::Empty emp_msg;
+	
 int main(int argc, char** argv)
 {
-  ROS_INFO("Terbang melingkar");
-  ros::init(argc, argv, "ARDrone_test");
-  ros::NodeHandle node_handle;
-  ros::Rate r(10);
-  
-  ros::Publisher takeoff1, takeoff2;
-  ros::Publisher a1, a2;
-  ros::Publisher land1, land2;
-  ros::Publisher reset1, reset2;
-  ros::Publisher lingkar1, lingkar2;
-  
-  float takeoff_time = 3.0;
-  float lingkar_time = 10.0;
-  float land_time = 3.0;
-  float reset_time = 3.0;
-  
-  //state buat hovering
-  h.linear.x = 0.0;
-  h.linear.y = 0.0;
-  h.linear.z = 0.0;
-  h.angular.x = 0.0;
-  h.angular.y = 0.0;
-  h.angular.z = 0.0;
-  
-  /* definisi gerakan melingkar
-   * untuk menggerakan secara melingkar angular.z berfungsi untuk membuat gerakan cmd_vel 
-   * seolah-olah melingkar, tidak bergerak ke atas
-   * referensi gerakan dari cmd_vel dan ardrone_autonomy
-  */
-  msg1.linear.x = 0.25;
-  msg1.linear.y = 0.0;
-  msg1.linear.z = 0.0;
-  msg1.angular.x = 0.0;
-  msg1.angular.y = 0.0;
-  msg1.angular.z = 0.25;
-  
-  /* berikut ini untuk bergerak melingkar reverse atau counter clockwise
-  */
-  msg2.linear.x = -msg1.linear.x;
-  msg2.linear.y = -msg1.linear.y;
-  msg2.linear.z = -msg1.linear.z;
-  msg2.angular.x = -msg1.angular.x;
-  msg2.angular.y = -msg1.angular.y;
-  msg2.angular.z = -msg1.angular.z;
-  
-  //Empty message buat takeoff dan landing 
-  takeoff1 = node_handle.advertise<std_msgs::Empty>("/ardrone1/ardrone/takeoff", 1);
-  takeoff2 = node_handle.advertise<std_msgs::Empty>("/ardrone2/ardrone/takeoff", 1);
-  
-  land1 = node_handle.advertise<std_msgs::Empty>("/ardrone1/ardrone/land", 1);
-  land2 = node_handle.advertise<std_msgs::Empty>("/ardrone2/ardrone/land", 1);
-  
-  reset1 = node_handle.advertise<std_msgs::Empty>("/ardrone1/ardrone/reset", 1);
-  reset2 = node_handle.advertise<std_msgs::Empty>("/ardrone2/ardrone/reset", 1);
-  
-  lingkar1 = node_handle.advertise<geometry_msgs::Twist>("/ardrone1/ardrone/cmd_vel", 1);
-  lingkar2 = node_handle.advertise<geometry_msgs::Twist>("/ardrone2/ardrone/cmd_vel", 1);
-  
-  double start_time=(double)ros::Time::now().toSec();
-  while(ros::ok())
-  {
-    while((double)ros::Time::now().toSec() < start_time+takeoff_time)
-    {
-      takeoff1.publish(t);
-      takeoff2.publish(t);
-      a1.publish(h);
-      a2.publish(h);
-      ROS_INFO("takeoff");
-      ros::spinOnce();
-      r.sleep();
-    } // while takeoff
-    
-    while  ((double)ros::Time::now().toSec()> start_time+takeoff_time+lingkar_time)
-    {
+
+    ROS_INFO("ARdrone Test Back and Forth Starting");
+    ros::init(argc, argv,"ARDrone_test");
+    ros::NodeHandle node;
+    ros::Rate loop_rate(20);
+
+	ros::Publisher pub_empty_land1;
+	ros::Publisher pub_empty_land2;
+	ros::Publisher pub_twist1;
+	ros::Publisher pub_twist2;
+	ros::Publisher pub_empty_takeoff1;
+	ros::Publisher pub_empty_takeoff2;
+	ros::Publisher pub_empty_reset1;
+	ros::Publisher pub_empty_reset2;
+	double start_time;
+
+//hover message
+			hover.linear.x=0.0; 
+			hover.linear.y=0.0;
+			hover.linear.z=0.0;
+			hover.angular.x=0.0; 
+			hover.angular.y=0.0;
+			hover.angular.z=0.0;  
+//up message
+			naik.linear.x=0.0; 
+			naik.linear.y=0.0;
+			naik.linear.z=0.5;
+			naik.angular.x=0.0; 
+			naik.angular.y=0.0;
+			naik.angular.z=0.0;
+//command message
+			float takeoff_time=5.0;
+			float fly_time=7.0;
+			float land_time=3.0;
+			float kill_time =2.0;	
+			
+//gerak melingkar cw			
+			lingkar.linear.x=1.0; 
+			lingkar.linear.y=0.0;
+			lingkar.linear.z=0.0;
+			lingkar.angular.x=0.0; 
+			lingkar.angular.y=0.0;
+			lingkar.angular.z=1.0;
+
+//gerak melingkar ccw
+			lingkar_neg.linear.x=-lingkar.linear.x; 
+			lingkar_neg.linear.y=-lingkar.linear.y;
+			lingkar_neg.linear.z=-lingkar.linear.z;
+			lingkar_neg.angular.x=-lingkar.angular.x; 
+			lingkar_neg.angular.y=-lingkar.angular.y;
+			lingkar_neg.angular.z=-lingkar.angular.z;
+// gerak lurus
+
+			lurus.linear.x=1.0; 
+			lurus.linear.y=0.0;
+			lurus.linear.z=0.0;
+			lurus.angular.x=0.0; 
+			lurus.angular.y=0.0;
+			lurus.angular.z=0.0;
+
+//gerak mundur
+			mundur.linear.x=-lurus.linear.x; 
+			mundur.linear.y=-lurus.linear.y;
+			mundur.linear.z=-lurus.linear.z;
+			mundur.angular.x=-lurus.angular.x; 
+			mundur.angular.y=-lurus.angular.y;
+			mundur.angular.z=-lurus.angular.z;
+	
+    	pub_twist1 = node.advertise<geometry_msgs::Twist>("/ardrone1/ardrone/cmd_vel", 1); 
+	pub_twist2 = node.advertise<geometry_msgs::Twist>("/ardrone2/ardrone/cmd_vel", 1); 
+	pub_empty_takeoff1 = node.advertise<std_msgs::Empty>("/ardrone1/ardrone/takeoff", 1); 
+	pub_empty_takeoff2 = node.advertise<std_msgs::Empty>("/ardrone2/ardrone/takeoff", 1); 
+	pub_empty_land1 = node.advertise<std_msgs::Empty>("/ardrone1/ardrone/land", 1); 
+	pub_empty_land2 = node.advertise<std_msgs::Empty>("/ardrone2/ardrone/land", 1); 
+	pub_empty_reset1 = node.advertise<std_msgs::Empty>("/ardrone1/ardrone/reset", 1); 
+	pub_empty_reset2 = node.advertise<std_msgs::Empty>("/ardrone2/ardrone/reset", 1); 
+
+	start_time =(double)ros::Time::now().toSec();	
+	ROS_INFO("AR Drone loop dimulai, biasanya loop forever");
+
+while (ros::ok()) 
+{
+		while ((double)ros::Time::now().toSec()< start_time+takeoff_time)
+		{ //takeoff
 		
-			a1.publish(h); //dronenya hovers
-			a2.publish(h); //dronenya hovers (harusnya)
-			land1.publish(l); //dronenya landing
-			land2.publish(l); //dronenya landing
+			pub_empty_takeoff1.publish(emp_msg); //launches the drone
+			pub_empty_takeoff2.publish(emp_msg); //launches the drone
+			pub_twist1.publish(hover); //drone is flat
+			pub_twist2.publish(hover); //drone is flat	
+			ROS_INFO("Taking off");
+			ros::spinOnce();
+			loop_rate.sleep();
+			}//while takeoff
+
+		while  ((double)ros::Time::now().toSec()> start_time+takeoff_time+fly_time)
+		{
+		
+			pub_twist1.publish(hover); //drone is flat
+			pub_twist2.publish(hover); //drone is flat
+			pub_empty_land1.publish(emp_msg); //lands the drone
+			pub_empty_land2.publish(emp_msg); //lands the drone
 			ROS_INFO("Landing");
-			
-			if ((double)ros::Time::now().toSec()> takeoff_time+start_time+lingkar_time+land_time+reset_time)
+								
+			if ((double)ros::Time::now().toSec()> takeoff_time+start_time+fly_time+land_time+kill_time){
+		
+			ROS_INFO("Closing Node");
+			//pub_empty_reset1.publish(emp_msg); //kills the drone
+			//pub_empty_reset2.publish(emp_msg); //kills the drone		
+			exit(0); 	}//kill node
+			ros::spinOnce();
+			loop_rate.sleep();			
+		}//while land
+
+		while ( (double)ros::Time::now().toSec()> start_time+takeoff_time && (double)ros::Time::now().toSec()< start_time+takeoff_time+fly_time)
+		{			
+			if((double)ros::Time::now().toSec()< start_time+takeoff_time+fly_time/2)
 			{
-				ROS_INFO("Nodenya mati");
-				//pub_empty_reset.publish(emp_msg); //kills the drone		
-				exit(0); 	
-			}//kill node
-			ros::spinOnce();
-			r.sleep();
-    }
-    while ( (double)ros::Time::now().toSec()> start_time+takeoff_time &&(double)ros::Time::now().toSec()< start_time+takeoff_time+fly_time)
-    {
-      if((double)ros::Time::now().toSec()< (start_time+takeoff_time+lingkar_time)/2)
-      {
-        a1.publish(msg1);
-        a2.publish(msg1);
-        ROS_INFO("Terbang lingkar +");
-      }
-      
-      if((double)ros::Time::now().toSec()> (start_time+takeoff_time+fly_time)/2)
-      {
-        a1.publish(msg2);
-        a2.publish(msg2);
-        ROS_INFO("Terbang lingkar -");
-			} // terbang sesuai twist yang diinginkan
+				pub_twist1.publish(lingkar);
+				pub_twist2.publish(lingkar);
+				ROS_INFO("terbang melingkar cw");
+
+			}//fly according to desired twist
+			
+			if((double)ros::Time::now().toSec()> start_time+takeoff_time+fly_time/2){
+			pub_twist1.publish(lingkar_neg);
+			pub_twist2.publish(lingkar_neg);
+			ROS_INFO("terbang melingkar ccw");
+
+			}//fly according to desired twist
 			
 			ros::spinOnce();
-			r.sleep();
-    }
-    ros::spinOnce();
-    r.sleep();
-    
-  } //ros::ok
-  
-} //main
+			loop_rate.sleep();
+			}
+
+	ros::spinOnce();
+	loop_rate.sleep();
+
+}//ros::ok
+
+}//main
