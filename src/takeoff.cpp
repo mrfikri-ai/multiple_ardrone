@@ -24,11 +24,10 @@ int main(int argc, char** argv)
   float takeoff_time = 5.0;
   
   //declaration for max altitude after ardrone is taking-off
-  double vx = 0.0;
-  double vy = 0.0;
-  double xz = 0.0;
+  uint32_t vz = 250; //kecepatan sumbu z = 250mm/s
   
-  int32 m_altd;
+  uint32_t max_altd = 1500; //declaration of max altitude
+  uint32_t min_altd = 50; //declaration of min altitude
   
   while(ros::ok())
   {
