@@ -9,8 +9,6 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   std_msgs
   geometry_msgs
-  tf
-  ardrone_autonomy
 )
 
 ## System dependencies are found with CMake's conventions
@@ -84,8 +82,8 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES skripsi
-# CATKIN_DEPENDS roscpp rospy std_msgs ardrone_autonomy geometry_msgs tf
+#  LIBRARIES multiple_ardrone
+#  CATKIN_DEPENDS roscpp rospy std_msgs
 #  DEPENDS system_lib
 )
 
@@ -101,49 +99,39 @@ include_directories(
 )
 
 ## Declare a cpp library
-# add_library(skripsi
-#   src/${PROJECT_NAME}/skripsi.cpp
+# add_library(multiple_ardrone
+#   src/${PROJECT_NAME}/multiple_ardrone.cpp
 # )
 
 ## Declare a cpp executable
+# add_executable(multiple_ardrone_node src/multiple_ardrone_node.cpp)
+add_executable(terbang src/terbang.cpp)
 add_executable(takeoff src/takeoff.cpp)
 add_executable(landing src/landing.cpp)
-add_executable(resset src/reset.cpp)
-add_executable(terbang src/terbang.cpp)
 add_executable(lingkar src/lingkar.cpp)
+add_executable(fly src/fly.cpp)
+add_executable(reset src/reset.cpp)
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
-# add_dependencies(skripsi_node skripsi_generate_messages_cpp)
+# add_dependencies(multiple_ardrone_node multiple_ardrone_generate_messages_cpp)
+add_dependencies(terbang terbang_cpp)
 add_dependencies(takeoff takeoff_cpp)
 add_dependencies(landing landing_cpp)
-add_dependencies(reset reset_cpp)
-add_dependencies(terbang terbang_cpp)
 add_dependencies(lingkar lingkar_cpp)
+add_dependencies(fly fly_cpp)
+add_dependencies(reset reset_cpp)
 
 ## Specify libraries to link a library or executable target against
-# target_link_libraries(skripsi_node
+# target_link_libraries(multiple_ardrone_node
 #   ${catkin_LIBRARIES}
 # )
-  target_link_libraries(takeoff 
-    ${catkin_LIBRARIES}
-  )
-  
-  target_link_libraries(landing 
-    ${catkin_LIBRARIES}
-  )
-  
-  target_link_libraries(reset 
-    ${catkin_LIBRARIES}
-  )
-  
-  target_link_libraries(terbang 
-    ${catkin_LIBRARIES}
-  )
-
-  target_link_libraries(lingkar 
-    ${catkin_LIBRARIES}
-  )
+target_link_libraries(terbang ${catkin_LIBRARIES})
+target_link_libraries(takeoff ${catkin_LIBRARIES})
+target_link_libraries(landing ${catkin_LIBRARIES})
+target_link_libraries(lingkar ${catkin_LIBRARIES})
+target_link_libraries(fly ${catkin_LIBRARIES})
+target_link_libraries(reset ${catkin_LIBRARIES})
 
 #############
 ## Install ##
@@ -160,7 +148,7 @@ add_dependencies(lingkar lingkar_cpp)
 # )
 
 ## Mark executables and/or libraries for installation
-# install(TARGETS skripsi skripsi_node
+# install(TARGETS multiple_ardrone multiple_ardrone_node
 #   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
@@ -185,7 +173,7 @@ add_dependencies(lingkar lingkar_cpp)
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_skripsi.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_multiple_ardrone.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
