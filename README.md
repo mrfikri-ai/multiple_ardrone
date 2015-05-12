@@ -9,8 +9,9 @@ https://github.com/parcon/arl_ardrone_examples/tree/master/src
 Change dependecies on your CMakeLists.txt, add_executable for your node and direct it with your .cpp or .py file
 
 First time I usually do when running this node
-> follow the instruction how to connect same IP address on multiple ardrones to your access point
-> roscore
-> roslaunch ardrone_autonomy [executable].launch
-> make sure you have make re-create and edited .launch file in ardrone_autonomy/src and give a name to each ardrone <group ns=""> before declaration of <node-pkg> and arguments for each ardrone with desired IP address.
-> open new terminal rosrun multiple_ardrone takeoff (launch ardrone to takeoff)
+
+1. follow the instruction how to connect same IP address on multiple ardrones to your access point
+2. roscore
+3. roslaunch ardrone_autonomy [executable].launch
+4. make sure you have make re-create and edited .launch file in ardrone_autonomy/src and give a name to each ardrone <group ns=""> before declaration of <node-pkg> and arguments for each ardrone with desired IP address.
+5. open new terminal rosrun multiple_ardrone takeoff (launch ardrone to takeoff)
