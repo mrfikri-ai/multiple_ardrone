@@ -23,6 +23,13 @@ int main(int argc, char** argv)
   b = node_handle.advertise<std_msgs::Empty>("/ardrone2/ardrone/takeoff", 1);
   float takeoff_time = 5.0;
   
+  //declaration for max altitude after ardrone is taking-off
+  double vx = 0.0;
+  double vy = 0.0;
+  double xz = 0.0;
+  
+  int32 m_altd;
+  
   while(ros::ok())
   {
     double time = (double)ros::Time::now().toSec();
