@@ -13,13 +13,14 @@
 
 using namespace std;
 
-std_msgs::Empty t, l, h;
+std_msgs::Empty t, l;
+geometry_msgs::Twist h;
 geometry_msgs::Twist msg1,msg2;
 
 int main(int argc, char** argv)
 {
   ROS_INFO("Terbang melingkar");
-  ros::init(argc, argv, "ARDrone_test")
+  ros::init(argc, argv, "ARDrone_test");
   ros::NodeHandle node_handle;
   ros::Rate r(10);
   
