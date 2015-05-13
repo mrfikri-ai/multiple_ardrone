@@ -8,7 +8,7 @@ https://github.com/parcon/arl_ardrone_examples/tree/master/src
 
 Change dependecies on your CMakeLists.txt, add_executable for your node and direct it with your .cpp or .py file
 
-First time I usually do when running this node
+How to run multiple_drone node
 
 1. follow the instruction how to connect same IP address on multiple ardrones to your access point
 2. roscore
