@@ -9,13 +9,13 @@
 #include <std_msgs/Empty.h>
 #include <geometry_msgs/Twist.h>
 
-	geometry_msgs::Twist lurus;
-	geometry_msgs::Twist mundur;
-	geometry_msgs::Twist lingkar;
-	geometry_msgs::Twist lingkar_neg;
-	geometry_msgs::Twist hover;
-	geometry_msgs::Twist naik;
-	std_msgs::Empty emp_msg;
+geometry_msgs::Twist lurus;
+geometry_msgs::Twist mundur;
+geometry_msgs::Twist lingkar;
+geometry_msgs::Twist lingkar_neg;
+geometry_msgs::Twist hover;
+geometry_msgs::Twist naik;
+std_msgs::Empty emp_msg;
 	
 int main(int argc, char** argv)
 {
@@ -56,6 +56,7 @@ int main(int argc, char** argv)
 			float kill_time =2.0;	
 			
 //gerak melingkar cw			
+			float radius = 5.0;
 			lingkar.linear.x=1.0; 
 			lingkar.linear.y=0.0;
 			lingkar.linear.z=0.0;
@@ -99,8 +100,8 @@ int main(int argc, char** argv)
 	start_time =(double)ros::Time::now().toSec();	
 	ROS_INFO("AR Drone loop dimulai, biasanya loop forever");
 
-while (ros::ok()) 
-{
+	while (ros::ok()) 
+	{
 		while ((double)ros::Time::now().toSec()< start_time+takeoff_time)
 		{ //takeoff
 		
@@ -111,7 +112,7 @@ while (ros::ok())
 			ROS_INFO("Taking off");
 			ros::spinOnce();
 			loop_rate.sleep();
-			}//while takeoff
+		}//while takeoff
 
 		while  ((double)ros::Time::now().toSec()> start_time+takeoff_time+fly_time)
 		{
@@ -133,29 +134,33 @@ while (ros::ok())
 		}//while land
 
 		while ( (double)ros::Time::now().toSec()> start_time+takeoff_time && (double)ros::Time::now().toSec()< start_time+takeoff_time+fly_time)
-		{			
-			if((double)ros::Time::now().toSec()< start_time+takeoff_time+fly_time/2)
-			{
-				pub_twist1.publish(lingkar);
-				pub_twist2.publish(lingkar);
-				ROS_INFO("terbang melingkar cw");
-
-			}//fly according to desired twist
+		{
+			/* circle movement */
+			for (lingkar.linear.x = 0; lingkar.linear.x <= 5.0; lingkar.linear.x += 0.1) {
+				lingkar.linear.y = sqrt((radius^2) - (lingkar.linear.y^2));
 			
-			if((double)ros::Time::now().toSec()> start_time+takeoff_time+fly_time/2){
-			pub_twist1.publish(lingkar_neg);
-			pub_twist2.publish(lingkar_neg);
-			ROS_INFO("terbang melingkar ccw");
-
-			}//fly according to desired twist
-			
-			ros::spinOnce();
-			loop_rate.sleep();
+				if((double)ros::Time::now().toSec()< start_time+takeoff_time+fly_time/2)
+				{
+					pub_twist1.publish(lingkar);
+					pub_twist2.publish(lingkar);
+					ROS_INFO("terbang melingkar cw");
+	
+				}//fly according to desired twist
+				
+				if((double)ros::Time::now().toSec()> start_time+takeoff_time+fly_time/2){
+					pub_twist1.publish(lingkar_neg);
+					pub_twist2.publish(lingkar_neg);
+					ROS_INFO("terbang melingkar ccw");
+				}//fly according to desired twist
+				
+				ros::spinOnce();
+				loop_rate.sleep();
 			}
+		}
 
-	ros::spinOnce();
-	loop_rate.sleep();
+		ros::spinOnce();
+		loop_rate.sleep();
 
-}//ros::ok
+	}//ros::ok
 
 }//main
