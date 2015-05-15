@@ -108,9 +108,9 @@ while (ros::ok())
 	  	 	pub_twist1.publish(lurus);
 			pub_twist2.publish(lurus);
 			ROS_INFO("terbang lurus");
+			ros::spinOnce();
+			loop_rate.sleep();
 		  }
-		ros::spinOnce();
-		loop_rate.sleep();
 		  
 		}//fly according to desired twist
 						
