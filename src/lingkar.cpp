@@ -1,4 +1,4 @@
-/*  Program for takeoff between with ardrones
+/*  Program for takeoff with ardrones
  *  Muhamad Rausyan Fikri - UGM 
  *
  *  Elins research group
@@ -136,9 +136,9 @@ int main(int argc, char** argv)
 		while ( (double)ros::Time::now().toSec()> start_time+takeoff_time && (double)ros::Time::now().toSec()< start_time+takeoff_time+fly_time)
 		{
 			/* circle movement */
-			for (lingkar.linear.x = 0; lingkar.linear.x <= 5.0; lingkar.linear.x += 0.1) {
+			for (lingkar.linear.x = 0; lingkar.linear.x <= 5.0; lingkar.linear.x += 0.1) 
+			{
 				lingkar.linear.y = sqrt((radius^2) - (lingkar.linear.y^2));
-			
 				if((double)ros::Time::now().toSec()< start_time+takeoff_time+fly_time/2)
 				{
 					pub_twist1.publish(lingkar);
