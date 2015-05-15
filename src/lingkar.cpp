@@ -10,6 +10,9 @@
 #include <geometry_msgs/Twist.h>
 #include <cmath>
 #include <cstdlib>
+#include <iostream>
+
+using namespace std;
 
 geometry_msgs::Twist lurus;
 geometry_msgs::Twist mundur;
@@ -74,7 +77,6 @@ int main(int argc, char** argv)
 			lingkar_neg.angular.y=-lingkar.angular.y;
 			lingkar_neg.angular.z=-lingkar.angular.z;
 // gerak lurus
-
 			lurus.linear.x=1.0; 
 			lurus.linear.y=0.0;
 			lurus.linear.z=0.0;
@@ -140,7 +142,7 @@ int main(int argc, char** argv)
 			/* circle movement */
 			for (lingkar.linear.x = 0; lingkar.linear.x <= 5.0; lingkar.linear.x += 0.1) 
 			{
-				lingkar.linear.y = sqrt((radius^2) - (lingkar.linear.y^2));
+				lingkar.linear.y = sqrt((radius*radius) - ((lingkar.linear.y)*(lingkar.linear.y)));
 				if((double)ros::Time::now().toSec()< start_time+takeoff_time+fly_time/2)
 				{
 					pub_twist1.publish(lingkar);
