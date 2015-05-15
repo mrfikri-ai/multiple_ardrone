@@ -105,10 +105,12 @@ while (ros::ok())
 		{
 		  for(lurus.linear.x = 0; lurus.linear.x <= 40.0; lurus.linear.x += 2.0)
 		  {
-  		  pub_twist1.publish(lurus);
-				pub_twist2.publish(lurus);
-				ROS_INFO("terbang lurus");
+	  	 	pub_twist1.publish(lurus);
+			pub_twist2.publish(lurus);
+			ROS_INFO("terbang lurus");
 		  }
+		ros::spinOnce();
+		loop_rate.sleep();
 		  
 		}//fly according to desired twist
 						
