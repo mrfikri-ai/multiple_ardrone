@@ -1,4 +1,4 @@
-/*  Program for takeoff between two ardrones
+/*  Program untuk terbang lurus dengan dua ardrones
  *  Muhamad Rausyan Fikri - UGM 
  *
  *  Elins research group
