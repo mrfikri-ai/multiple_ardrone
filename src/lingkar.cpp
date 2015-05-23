@@ -1,4 +1,4 @@
-/*  Program for takeoff with ardrones
+/*  Program for lingkar with ardrones
  *  Muhamad Rausyan Fikri - UGM 
  *
  *  Elins research group
@@ -62,12 +62,12 @@ int main(int argc, char** argv)
 			
 //gerak melingkar cw			
 			float radius = 5.0;
-			lingkar.linear.x=2.0; 
+			lingkar.linear.x=0.3; 
 			lingkar.linear.y=0.0;
 			lingkar.linear.z=0.0;
 			lingkar.angular.x=0.0; 
 			lingkar.angular.y=0.0;
-			lingkar.angular.z=2.0;
+			lingkar.angular.z=0.3;
 
 //gerak melingkar ccw
 			lingkar_neg.linear.x=-lingkar.linear.x; 
@@ -77,7 +77,7 @@ int main(int argc, char** argv)
 			lingkar_neg.angular.y=-lingkar.angular.y;
 			lingkar_neg.angular.z=-lingkar.angular.z;
 // gerak lurus
-			lurus.linear.x=2.0; 
+			lurus.linear.x=0.3; 
 			lurus.linear.y=0.0;
 			lurus.linear.z=0.0;
 			lurus.angular.x=0.0; 
