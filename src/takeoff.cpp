@@ -1,4 +1,4 @@
-/*  Program for takeoff between two ardrones
+/*  Program for takeoff with ardrones
  *  Muhamad Rausyan Fikri - UGM 
  *
  *  Elins research group
