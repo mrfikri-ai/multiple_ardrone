@@ -23,7 +23,7 @@ int main(int argc, char** argv)
     ROS_INFO("ARdrone Test Back and Forth Starting");
     ros::init(argc, argv,"ARDrone_test");
     ros::NodeHandle node;
-    ros::Rate loop_rate(20);
+    ros::Rate loop_rate(50);
 
 	ros::Publisher pub_empty_land1;
 	ros::Publisher pub_empty_land2;
@@ -66,12 +66,12 @@ int main(int argc, char** argv)
 			float kill_time =2.0;	
 			
 //gerak melingkar cw			
-			lingkar.linear.x=2.0; 
+			lingkar.linear.x=0.3; 
 			lingkar.linear.y=0.0;
 			lingkar.linear.z=0.0;
 			lingkar.angular.x=0.0; 
 			lingkar.angular.y=0.0;
-			lingkar.angular.z=2.0;
+			lingkar.angular.z=0.3;
 
 //gerak melingkar ccw
 			lingkar_neg.linear.x=-lingkar.linear.x; 
@@ -82,7 +82,7 @@ int main(int argc, char** argv)
 			lingkar_neg.angular.z=-lingkar.angular.z;
 
 // gerak lurus
-			lurus.linear.x=2.0; 
+			lurus.linear.x=0.3; 
 			lurus.linear.y=0.0;
 			lurus.linear.z=0.0;
 			lurus.angular.x=0.0; 
