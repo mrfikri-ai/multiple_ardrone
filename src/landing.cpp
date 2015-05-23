@@ -1,7 +1,8 @@
-/*  Program for takeoff between two ardrones
+/*  Program for landing with two ardrones
  *  Muhamad Rausyan Fikri - UGM 
  *
  *  Elins research group
+ *  landing.cpp
  */
  
 #include <ros/ros.h>
