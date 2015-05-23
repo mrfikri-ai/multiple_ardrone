@@ -23,7 +23,7 @@ int main(int argc, char** argv)
     ROS_INFO("ARdrone Test Back and Forth Starting");
     ros::init(argc, argv,"ARDrone_test");
     ros::NodeHandle node;
-    ros::Rate loop_rate(20);
+    ros::Rate loop_rate(50);
 
 	ros::Publisher pub_empty_land1;
 	ros::Publisher pub_empty_land2;
