@@ -51,7 +51,7 @@ int main(int argc, char** argv)
 			naik.angular.z=0.0;
 //command message
 			float takeoff_time=5.0;
-			float fly_time=20.0;
+			float fly_time=7.0;
 			float land_time=3.0;
 			float kill_time =2.0;	
 			
