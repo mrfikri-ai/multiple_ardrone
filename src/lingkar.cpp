@@ -1,4 +1,4 @@
-/*  Program for lingkar with ardrones
+/*  Program for lingkar with two ardrones
  *  Muhamad Rausyan Fikri - UGM 
  *
  *  Elins research group
@@ -62,12 +62,12 @@ int main(int argc, char** argv)
 			
 //gerak melingkar cw			
 			float radius = 5.0;
-			lingkar.linear.x=0.3; 
+			lingkar.linear.x=0.2; 
 			lingkar.linear.y=0.0;
 			lingkar.linear.z=0.0;
 			lingkar.angular.x=0.0; 
 			lingkar.angular.y=0.0;
-			lingkar.angular.z=0.3;
+			lingkar.angular.z=0.2;
 
 //gerak melingkar ccw
 			lingkar_neg.linear.x=-lingkar.linear.x; 
@@ -77,7 +77,7 @@ int main(int argc, char** argv)
 			lingkar_neg.angular.y=-lingkar.angular.y;
 			lingkar_neg.angular.z=-lingkar.angular.z;
 // gerak lurus
-			lurus.linear.x=0.3; 
+			lurus.linear.x=0.2; 
 			lurus.linear.y=0.0;
 			lurus.linear.z=0.0;
 			lurus.angular.x=0.0; 
@@ -92,8 +92,8 @@ int main(int argc, char** argv)
 			mundur.angular.y=-lurus.angular.y;
 			mundur.angular.z=-lurus.angular.z;
 	
-    	pub_twist1 = node.advertise<geometry_msgs::Twist>("/ardrone1/ardrone/cmd_vel", 1); 
-	pub_twist2 = node.advertise<geometry_msgs::Twist>("/ardrone2/ardrone/cmd_vel", 1); 
+    	pub_twist1 = node.advertise<geometry_msgs::Twist>("/ardrone1/cmd_vel", 1); 
+	pub_twist2 = node.advertise<geometry_msgs::Twist>("/ardrone2/cmd_vel", 1); 
 	pub_empty_takeoff1 = node.advertise<std_msgs::Empty>("/ardrone1/ardrone/takeoff", 1); 
 	pub_empty_takeoff2 = node.advertise<std_msgs::Empty>("/ardrone2/ardrone/takeoff", 1); 
 	pub_empty_land1 = node.advertise<std_msgs::Empty>("/ardrone1/ardrone/land", 1); 
@@ -140,7 +140,7 @@ int main(int argc, char** argv)
 		while ( (double)ros::Time::now().toSec()> start_time+takeoff_time && (double)ros::Time::now().toSec()< start_time+takeoff_time+fly_time)
 		{
 			/* circle movement */
-			for (lingkar.linear.x = 0; lingkar.linear.x <= 30.0; lingkar.linear.x += 2.0) 
+			for (lingkar.linear.x = 0; lingkar.linear.x <= 10.0; lingkar.linear.x += 0.1) 
 			{
 				lingkar.linear.y = sqrt((radius*radius) - ((lingkar.linear.y)*(lingkar.linear.y)));
 				if((double)ros::Time::now().toSec()< start_time+takeoff_time+fly_time/2)
