@@ -56,12 +56,12 @@ int main(int argc, char** argv)
 			float kill_time =2.0;	
 			
 //gerak melingkar cw			
-			lingkar.linear.x=0.3; 
+			lingkar.linear.x=0.2; 
 			lingkar.linear.y=0.0;
 			lingkar.linear.z=0.0;
 			lingkar.angular.x=0.0; 
 			lingkar.angular.y=0.0;
-			lingkar.angular.z=0.3;
+			lingkar.angular.z=0.2;
 
 //gerak melingkar ccw
 			lingkar_neg.linear.x=-lingkar.linear.x; 
@@ -72,7 +72,7 @@ int main(int argc, char** argv)
 			lingkar_neg.angular.z=-lingkar.angular.z;
 // gerak lurus
 
-			lurus.linear.x=0.3; 
+			lurus.linear.x=0.2; 
 			lurus.linear.y=0.0;
 			lurus.linear.z=0.0;
 			lurus.angular.x=0.0; 
@@ -87,8 +87,8 @@ int main(int argc, char** argv)
 			mundur.angular.y=-lurus.angular.y;
 			mundur.angular.z=-lurus.angular.z;
 	
-  pub_twist1 = node.advertise<geometry_msgs::Twist>("/ardrone1/ardrone/cmd_vel", 1); /* Message queue length is just 1 */
-	pub_twist2 = node.advertise<geometry_msgs::Twist>("/ardrone2/ardrone/cmd_vel", 1); /* Message queue length is just 1 */
+	pub_twist1 = node.advertise<geometry_msgs::Twist>("/ardrone1/cmd_vel", 1); /* Message queue length is just 1 */
+	pub_twist2 = node.advertise<geometry_msgs::Twist>("/ardrone2/cmd_vel", 1); /* Message queue length is just 1 */
 	pub_empty_takeoff1 = node.advertise<std_msgs::Empty>("/ardrone1/ardrone/takeoff", 1); /* Message queue length is just 1 */
 	pub_empty_takeoff2 = node.advertise<std_msgs::Empty>("/ardrone2/ardrone/takeoff", 1); /* Message queue length is just 1 */
 	pub_empty_land1 = node.advertise<std_msgs::Empty>("/ardrone1/ardrone/land", 1); /* Message queue length is just 1 */
@@ -103,7 +103,7 @@ while (ros::ok())
 {
 		while ((double)ros::Time::now().toSec()< start_time+takeoff_time)
 		{
-		  for(lurus.linear.x = 0; lurus.linear.x <= 40.0; lurus.linear.x += 2.0)
+		  for(lurus.linear.x = 0; lurus.linear.x <= 10.0; lurus.linear.x += 0.1)
 		  {
 	  	 	pub_twist1.publish(lurus);
 			pub_twist2.publish(lurus);
