@@ -11,7 +11,7 @@
 std_msgs::Empty msg;
 geometry_msgs::Twist maju,mundur,hover,lingkar, naik, turun, kiri, kanan;
 
-char message[];
+char message='';
 
 int main(int argc, char **argv)
 {
@@ -85,6 +85,7 @@ kanan.angular.z = 0;
 
 while(ros::ok())
 {
+	scanf_s("%c", &message, 1);
 	  if(message[0] != " " && message[0] != "a" && message[0] != "s" && message[0] != "w" && message[0] != "d" && message[0] != "z" 
 		&& message[0] != "x" && message[0] != "c")
 	  {
