@@ -14,6 +14,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <iostream>
+#include <cmath>
+
+#define PI 3.14
 
 using namespace std;
 
@@ -30,6 +33,11 @@ using namespace std;
 	geometry_msgs::Twist yaw;
 	std_msgs::Empty msg;
 	
+char m =' ';	
+void ambilchar()
+{
+m = getchar();
+}
 int main(int argc, char** argv)
 {
 
@@ -38,6 +46,7 @@ int main(int argc, char** argv)
     ros::NodeHandle node;
     ros::Rate loop_rate(50);
 
+//defini buat memanggil instruksi cmd_vel dan Empty
 	ros::Publisher pub_empty_land1;
 	ros::Publisher pub_empty_land2;
 	ros::Publisher pub_twist1;
@@ -46,13 +55,15 @@ int main(int argc, char** argv)
 	ros::Publisher pub_empty_takeoff2;
 	ros::Publisher pub_empty_reset1;
 	ros::Publisher pub_empty_reset2;
-	double start_time;
 
-//command message
+//	double start_time;
+
+/*command message
 			float takeoff_time=5.0;
 			float fly_time=5.0;
 			float land_time=3.0;
 			float kill_time =2.0;	
+*/
 
 //hover message
 			hover.linear.x=0.0; 
@@ -68,7 +79,7 @@ int main(int argc, char** argv)
 			rotasi.linear.z = 0.0;
 			rotasi.angular.x = 0.0;
 			rotasi.angular.y = 0.0;
-			rotasi.angular.z = 1.0;
+			rotasi.angular.z = 0.7;
 
 //rotasi kiri 180 derajat
 			yaw.linear.x = -rotasi.linear.x;
@@ -81,7 +92,7 @@ int main(int argc, char** argv)
 //up message
 			naik.linear.x=0.0; 
 			naik.linear.y=0.0;
-			naik.linear.z=0.1;
+			naik.linear.z=0.05;
 			naik.angular.x=0.0; 
 			naik.angular.y=0.0;
 			naik.angular.z=0.0;
@@ -116,7 +127,7 @@ int main(int argc, char** argv)
 			lingkar.linear.z=0.0;
 			lingkar.angular.x=0.0; 
 			lingkar.angular.y=0.0;
-			lingkar.angular.z=1.0;
+			lingkar.angular.z=0.5;
 
 //gerak melingkar ccw
 			lingkar_neg.linear.x=-lingkar.linear.x; 
@@ -151,11 +162,30 @@ int main(int argc, char** argv)
 	pub_empty_reset1 = node.advertise<std_msgs::Empty>("/ardrone1/ardrone/reset", 1); /* Message queue length is just 1 */
 	pub_empty_reset2 = node.advertise<std_msgs::Empty>("/ardrone2/ardrone/reset", 1); /* Message queue length is just 1 */
 
-	start_time =(double)ros::Time::now().toSec();	
+//	start_time =(double)ros::Time::now().toSec();	
 	ROS_INFO("AR Drone loop dimulai, biasanya loop forever");
+
+//	int n=0;
+	float y, xy;
+	float radius;
+	
+	// 2pi radian = 180 derajat = 1 lingkaran penuh
+	// mengatur bahwa ar drone  
+	xy = 2*PI;
+	
+	cout <<"berapa kali putaran \n";
+	cin >> y;
+	cout <<"Input radius lingkaran \n";
+	cin >> radius;
+	
+	cout <<" banyaknya putaran yang diinginkan = \n "<<y*xy<<"radius = \n "<<radius;
+	
+getchar();
 
 while (ros::ok()) 
 {
+	//Definisi dari banyaknya iterasi yang diinginkan
+		
 	cout <<" simple keyboard controller yang digunakan untuk mengendalikan dua quadrotor \n"
 		 <<" inilah perintah yang digunakan untuk setiap stepnya \n"
 		 <<" =========================================================================== \n"
@@ -167,9 +197,10 @@ while (ros::ok())
 		 <<" i/k = naik / turun \n"
 		 <<" o/p = lingkar cw / ccw \n"	 
 		 <<" Ctrl + C untuk menonaktifkan program \n";
-		 
-	char m = getchar();	
-		
+	 
+	 ambilchar();
+
+//Perintah untuk takeoff	 		
 		if(m == 't')		
 		{
 			pub_empty_takeoff1.publish(msg); //launches the drone
@@ -179,9 +210,10 @@ while (ros::ok())
 			ROS_INFO("Taking off");
 			ros::spinOnce();
 			loop_rate.sleep();
-			m=' ';	
+			m = ' ';
 		}
 
+//Perintah untuk landing
 		if(m == 'l')
 		{	
 			pub_twist1.publish(hover); //drone is flat
@@ -190,9 +222,10 @@ while (ros::ok())
 			pub_empty_land2.publish(msg); //lands the drone
 			ROS_INFO("Landing");
 			exit(0);
-			m=' ';
+			m = ' ';
 		}	
-		
+
+//Perintah untuk reset		
 		if(m == 'r')
 		{				
 			ROS_INFO("Closing Node");
@@ -200,108 +233,165 @@ while (ros::ok())
 			//pub_empty_reset2.publish(msg); //kills the drone		
 			exit(0); 
 			ros::spinOnce();
-			loop_rate.sleep();			
-			m=' ';
+			loop_rate.sleep();
+			m = ' ';			
 		}	
-		
+
+//Perintah ke kiri		
 		if(m == 'a')
 		{
 			ROS_INFO("Kiri");
-			kiri.linear.y += 1.0;
+			kiri.linear.y += 0.1;
 			pub_twist1.publish(kiri);
 			pub_twist2.publish(kiri);
 			m = ' ';
 		}
-		
+
+//Perintah ke kanan		
 		if(m == 'd')
 		{
 			ROS_INFO("kanan");
-			kanan.linear.y -= 1.0;
+			kanan.linear.y -= 0.1;
 			pub_twist1.publish(kanan);
 			pub_twist2.publish(kanan);
 			m = ' ';
 		}
-		
+
+//State hover 		
+		if(m == 'h')
+		{
+			ROS_INFO("hover");
+			pub_twist1.publish(hover);
+			pub_twist2.publish(hover);
+			m = ' ';
+		}
+
+//Perintah untuk maju		
 		if(m == 'w' )
 		{
 			ROS_INFO("maju");
-			lurus.linear.x += 1;
+			lurus.linear.x += 0.1;
 			pub_twist1.publish(lurus);
 			pub_twist2.publish(lurus);
 			m = ' ';
 		}
-		
+
+//Perintah untuk mundur		
 		if(m == 's' )
 		{
 			ROS_INFO("mundur");
-			mundur.linear.x -= 1.0;
+			mundur.linear.x -= 0.1;
 			pub_twist1.publish(mundur);
 			pub_twist2.publish(mundur);
 			m = ' ';
 		}
-		
+
+//Perintah yawing ke kanan		
 		if(m == 'q' )
 		{
 			ROS_INFO("yawing ke kanan");
-			rotasi.angular.z += 1.0;
+			rotasi.angular.z += 0.1;
 			pub_twist1.publish(rotasi);
 			pub_twist2.publish(rotasi);
 			m = ' ';
 		}
-		
+
+//Perintah untuk yawing ke kiri		
 		if(m == 'e' )
 		{
 			ROS_INFO("yawing ke kiri");
-			yaw.angular.z -= 1.0;
+			yaw.angular.z -= 0.5;
 			pub_twist1.publish(yaw);
 			pub_twist2.publish(yaw);
 			m = ' ';
 		}
-		
+
+//Perintah untuk naik		
 		if(m == 'i' )
 		{
 			ROS_INFO("naik");
-			naik.linear.z -= 1.0;
+			naik.linear.z += 0.05;
 			pub_twist1.publish(naik);
 			pub_twist2.publish(naik);
 			m = ' ';
 		}
 		
+//Perintah untuk turun		
 		if(m == 'k' )
 		{
 			ROS_INFO("turun");
-			turun.linear.z -= 1.0;
+			turun.linear.z -= 0.05;
 			pub_twist1.publish(turun);
 			pub_twist2.publish(turun);
 			m = ' ';
 		}
-		
+
+//Perintah untuk AR.Drone bergerak lingkaran positif		
 		if(m == 'o')
 		{
+			lingkar.linear.x = 0.0; // m/s
+			lingkar.angular.z = 0.0; //rad/s
 			ROS_INFO("lingkar cw");
-			lingkar.linear.x += 1.0;
-			lingkar.angular.z += 1.0;
-			pub_twist1.publish(lingkar);
-			pub_twist2.publish(lingkar);
-			m = ' ';
+			for(lingkar.linear.x = 0; lingkar.linear.x<=y; lingkar.linear.x+= 0.1)
+			{
+				lingkar.linear.x = 0.1;
+				lingkar.angular.z = ((lingkar.linear.x)/(y*xy));
+				pub_twist1.publish(lingkar);
+				pub_twist2.publish(lingkar);
+				m = ' ';	
+			} 
 		}
-		
+
+//Perintah untuk menggerakkan AR.Drone negatif. Negatif bukan menandakan besaran tapi arah		
 		if(m == 'p' )
 		{
+			lingkar.linear.x = 0.0;
+			lingkar.angular.z = 0.0;
 			ROS_INFO("lingkar ccw");
-			lingkar_neg.linear.x -= 1.0;
-			lingkar_neg.angular.z -= 1.0;
-			pub_twist1.publish(lingkar_neg);
-			pub_twist2.publish(lingkar_neg);
-			m = ' ';
+			for(lingkar.linear.x=y; lingkar.linear.x>=0; lingkar.linear.x-= 0.1)
+			{
+				lingkar_neg.linear.x = -0.1;  //kecepatan linearnya
+				lingkar_neg.angular.z = -((lingkar.linear.x)/(y*xy)); //kecepatan angular
+				pub_twist1.publish(lingkar_neg);
+				pub_twist2.publish(lingkar_neg);
+				m = ' ';
+			}				
+		}
+
+//Masuk ke perintah membentuk angka delapan		
+		if(m =='v')
+		{			
+			lingkar.linear.x = 0.0;
+			lingkar.angular.z = 0.0;
+			ROS_INFO("angka delapan");
+			for(lingkar.linear.x = 0; lingkar.linear.x<=y; lingkar.linear.x+= 0.1)
+			{
+				lingkar.linear.x = 0.1;
+				lingkar.angular.z = ((lingkar.linear.x)/(y*xy));
+				pub_twist1.publish(lingkar);
+				pub_twist2.publish(lingkar);
+				m = ' ';	
+			}
+			
+			for(lingkar.linear.x=y; lingkar.linear.x>=0; lingkar.linear.x-= 0.1)
+			{
+				lingkar_neg.linear.x = -0.1;
+				lingkar_neg.angular.z = -((lingkar.linear.x)/(y*xy));
+				pub_twist1.publish(lingkar_neg);
+				pub_twist2.publish(lingkar_neg);
+				m = ' ';
+			}			
 		}
 		
-		if(m!='a' || m!='w' || m!='s' || m!='d' || m!='i' || m!='k' || m!='o' || m!='p' || m!='t' || m!='l' || m!='r' )
+//Jika tidak ada satu karakter yang sesuai maka "perintah tidak ditemukan" keluar		
+		if(m!='a' || m!='w' || m!='s' || m!='d' || m!='i' || m!='k' || m!='o' || m!='p' || m!='t' || m!='l' || m!='r' || m!='h' || m!='v')
 		{
 			ROS_INFO("perintah tidak ditemukan");
-			m = ' ';
+			m = ' ';	
+
 		}
-		
+
+//di sini perintah halted		
 	printf(" \n");	
 	ros::spinOnce();
 	loop_rate.sleep();
