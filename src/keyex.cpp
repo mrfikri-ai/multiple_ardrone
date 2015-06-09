@@ -32,15 +32,27 @@ using namespace std;
 	geometry_msgs::Twist rotasi;
 	geometry_msgs::Twist yaw;
 	std_msgs::Empty msg;
+
+int getche(void) {
+    struct termios oldattr, newattr;
+    int ch;
+    tcgetattr( STDIN_FILENO, &oldattr );
+    newattr = oldattr;
+    newattr.c_lflag &= ~( ICANON );
+    tcsetattr( STDIN_FILENO, TCSANOW, &newattr );
+    ch = getchar();
+    tcsetattr( STDIN_FILENO, TCSANOW, &oldattr );
+    return ch;
+}
+
 	
 char m =' ';	
 void ambilchar()
 {
-m = getchar();
+m = getche();
 }
 int main(int argc, char** argv)
 {
-
     ROS_INFO("ARdrone Test Back and Forth Starting");
     ros::init(argc, argv,"ARDrone_test");
     ros::NodeHandle node;
