@@ -15,23 +15,12 @@
 #include <string.h>
 #include <iostream>
 #include <cmath>
+#include <termios.h>
 
 #define PI 3.14
 
 using namespace std;
 
-	geometry_msgs::Twist lurus;
-	geometry_msgs::Twist mundur;
-	geometry_msgs::Twist lingkar;
-	geometry_msgs::Twist lingkar_neg;
-	geometry_msgs::Twist hover;
-	geometry_msgs::Twist naik;
-	geometry_msgs::Twist turun;
-	geometry_msgs::Twist kiri;
-	geometry_msgs::Twist kanan;
-	geometry_msgs::Twist rotasi;
-	geometry_msgs::Twist yaw;
-	std_msgs::Empty msg;
 
 int getche(void) {
     struct termios oldattr, newattr;
@@ -45,6 +34,18 @@ int getche(void) {
     return ch;
 }
 
+	geometry_msgs::Twist lurus;
+	geometry_msgs::Twist mundur;
+	geometry_msgs::Twist lingkar;
+	geometry_msgs::Twist lingkar_neg;
+	geometry_msgs::Twist hover;
+	geometry_msgs::Twist naik;
+	geometry_msgs::Twist turun;
+	geometry_msgs::Twist kiri;
+	geometry_msgs::Twist kanan;
+	geometry_msgs::Twist rotasi;
+	geometry_msgs::Twist yaw;
+	std_msgs::Empty msg;
 	
 char m =' ';	
 void ambilchar()
@@ -53,6 +54,7 @@ m = getche();
 }
 int main(int argc, char** argv)
 {
+
     ROS_INFO("ARdrone Test Back and Forth Starting");
     ros::init(argc, argv,"ARDrone_test");
     ros::NodeHandle node;
@@ -91,7 +93,7 @@ int main(int argc, char** argv)
 			rotasi.linear.z = 0.0;
 			rotasi.angular.x = 0.0;
 			rotasi.angular.y = 0.0;
-			rotasi.angular.z = 0.7;
+			rotasi.angular.z = 0.5;
 
 //rotasi kiri 180 derajat
 			yaw.linear.x = -rotasi.linear.x;
@@ -133,16 +135,16 @@ int main(int argc, char** argv)
 			kanan.angular.y = -kiri.angular.y;
 			kanan.angular.z = -kiri.angular.z;
 			
-//gerak melingkar cw			
-			lingkar.linear.x=0.1; 
+//gerak melingkar ccw			
+			lingkar.linear.x=0.2; 
 			lingkar.linear.y=0.0;
 			lingkar.linear.z=0.0;
 			lingkar.angular.x=0.0; 
 			lingkar.angular.y=0.0;
-			lingkar.angular.z=0.5;
+			lingkar.angular.z=0.2;
 
-//gerak melingkar ccw
-			lingkar_neg.linear.x=-lingkar.linear.x; 
+//gerak melingkar cw
+			lingkar_neg.linear.x= lingkar.linear.x; 
 			lingkar_neg.linear.y=-lingkar.linear.y;
 			lingkar_neg.linear.z=-lingkar.linear.z;
 			lingkar_neg.angular.x=-lingkar.angular.x; 
@@ -177,19 +179,17 @@ int main(int argc, char** argv)
 //	start_time =(double)ros::Time::now().toSec();	
 	ROS_INFO("AR Drone loop dimulai, biasanya loop forever");
 
-//	int n=0;
+//	int n=360;
 	float y, xy;
 	float radius;
+	float iterasi = 0.0;
 	
-	// 2pi radian = 180 derajat = 1 lingkaran penuh
-	// mengatur bahwa ar drone  
 	xy = 2*PI;
 	
 	cout <<"berapa kali putaran \n";
 	cin >> y;
 	cout <<"Input radius lingkaran \n";
 	cin >> radius;
-	
 	cout <<" banyaknya putaran yang diinginkan = \n "<<y*xy<<"radius = \n "<<radius;
 	
 getchar();
@@ -208,6 +208,7 @@ while (ros::ok())
 		 <<" q/e = yawing kiri / kanan \n"
 		 <<" i/k = naik / turun \n"
 		 <<" o/p = lingkar cw / ccw \n"	 
+		 <<" v   = pola angka 8 \n"
 		 <<" Ctrl + C untuk menonaktifkan program \n";
 	 
 	 ambilchar();
@@ -341,13 +342,18 @@ while (ros::ok())
 //Perintah untuk AR.Drone bergerak lingkaran positif		
 		if(m == 'o')
 		{
+
+		/* 1 radian = 57 derajat
+		 * 1 rad/s = 57 derajat per detik
+		*/	  
+			 
 			lingkar.linear.x = 0.0; // m/s
-			lingkar.angular.z = 0.0; //rad/s
+			lingkar.angular.z = 0.0; //rad/s  
 			ROS_INFO("lingkar cw");
-			for(lingkar.linear.x = 0; lingkar.linear.x<=y; lingkar.linear.x+= 0.1)
+			for(iterasi = 0; iterasi<=10); iterasi +=1)
 			{
-				lingkar.linear.x = 0.1;
-				lingkar.angular.z = ((lingkar.linear.x)/(y*xy));
+				lingkar.linear.x += 0.2;
+				lingkar.angular.z += (lingkar.linear.x/radius) ;
 				pub_twist1.publish(lingkar);
 				pub_twist2.publish(lingkar);
 				m = ' ';	
@@ -357,13 +363,13 @@ while (ros::ok())
 //Perintah untuk menggerakkan AR.Drone negatif. Negatif bukan menandakan besaran tapi arah		
 		if(m == 'p' )
 		{
-			lingkar.linear.x = 0.0;
-			lingkar.angular.z = 0.0;
+			lingkar_neg.linear.x = 0.2;
+			lingkar_neg.angular.z = (lingkar.angular.z/radius);
 			ROS_INFO("lingkar ccw");
-			for(lingkar.linear.x=y; lingkar.linear.x>=0; lingkar.linear.x-= 0.1)
+			for(iterasi=0; iterasi<=10; iterasi +=1)
 			{
-				lingkar_neg.linear.x = -0.1;  //kecepatan linearnya
-				lingkar_neg.angular.z = -((lingkar.linear.x)/(y*xy)); //kecepatan angular
+				lingkar_neg.linear.x += 0.1;  //kecepatan linearnya
+				lingkar_neg.angular.z -= ((lingkar.linear.x)/radius); //kecepatan angular
 				pub_twist1.publish(lingkar_neg);
 				pub_twist2.publish(lingkar_neg);
 				m = ' ';
@@ -372,23 +378,24 @@ while (ros::ok())
 
 //Masuk ke perintah membentuk angka delapan		
 		if(m =='v')
-		{			
+		{	
+			iterasi = 0;		
 			lingkar.linear.x = 0.0;
-			lingkar.angular.z = 0.0;
+			lingkar.angular.z = (lingkar.angular.z/radius);
 			ROS_INFO("angka delapan");
-			for(lingkar.linear.x = 0; lingkar.linear.x<=y; lingkar.linear.x+= 0.1)
+			for(iterasi=0; iterasi<=10); iterasi +=1)
 			{
-				lingkar.linear.x = 0.1;
-				lingkar.angular.z = ((lingkar.linear.x)/(y*xy));
+				lingkar.linear.x = 0.2;
+				lingkar.angular.z = ((lingkar.linear.x)/radius);
 				pub_twist1.publish(lingkar);
 				pub_twist2.publish(lingkar);
 				m = ' ';	
 			}
 			
-			for(lingkar.linear.x=y; lingkar.linear.x>=0; lingkar.linear.x-= 0.1)
+			for(iterasi=10; iterasi>=0; iterasi -=1)
 			{
-				lingkar_neg.linear.x = -0.1;
-				lingkar_neg.angular.z = -((lingkar.linear.x)/(y*xy));
+				lingkar_neg.linear.x = 0.2;
+				lingkar_neg.angular.z = -((lingkar.linear.x)/radius);
 				pub_twist1.publish(lingkar_neg);
 				pub_twist2.publish(lingkar_neg);
 				m = ' ';
