@@ -19,6 +19,8 @@
 
 using namespace std;
 
+
+//buat fungsi input karakter getch() crossplatform
 int getche(void) {
     struct termios oldattr, newattr;
     int ch;
@@ -281,55 +283,70 @@ while (ros::ok())
 //Perintah untuk maju		
 		if(m == 'w' )
 		{
-			for(int i=0; i<lin_duration; i++)
+			lurus.linear.x = lin_speed;
+			int ticks = int(lin_duration*loop_rate);
+			for(int i=0; i<ticks; i++)
 			{
-	
 				ROS_INFO("maju");
-				lurus.linear.x = lin_speed;
 				pub_twist1.publish(lurus);
 				pub_twist2.publish(lurus);
-				loop_rate.sleep();
 				m = ' ';
 			}
 		pub_twist1.publish(hover);
 		pub_twist2.publish(hover);
+		loop_rate.sleep();
 		}
 
 //Perintah untuk mundur		
 		if(m == 's')
 		{
-			for(int i = 0; i<lin_duration; i++)
+			mundur.linear.x = -lin_speed;
+			int ticks = int(lin_duration*loop_rate);
+			for(int i = 0; i<ticks; i++)
 			{
 				ROS_INFO("mundur");
-				mundur.linear.x = -lin_speed;
 				pub_twist1.publish(mundur);
 				pub_twist2.publish(mundur);
-				loop_rate.sleep();
 				m = ' ';
 			}
 			pub_twist1.publish(hover);
 			pub_twist2.publish(hover);	
+			loop_rate.sleep();
 		}
 
 //Perintah yawing ke kanan		
 		if(m == 'q' )
 		{
-			for(int i=0)
-			ROS_INFO("yawing ke kanan");
-			rotasi.angular.z = lin_speed;
-			pub_twist1.publish(rotasi);
-			pub_twist2.publish(rotasi);
-			m = ' ';
+			rotasi.angular.z = ang_speed;
+			int ticks = int(goal_ang*rate);
+			for(int i=0; i<ticks; i++)
+			{	
+				ROS_INFO("yawing ke kanan");
+				pub_twist1.publish(rotasi);
+				pub_twist2.publish(rotasi);
+				m = ' ';
+			}	
+			pub_twist1.publish(hover);
+			pub_twist2.publish(hover);
+			loop_rate.sleep();
+			
 		}
 
 //Perintah untuk yawing ke kiri		
 		if(m == 'e' )
 		{
-			ROS_INFO("yawing ke kiri");
-			yaw.angular.z = -0.5;
-			pub_twist1.publish(yaw);
-			pub_twist2.publish(yaw);
-			m = ' ';
+			yaw.angular.z = -ang_speed;
+			int ticks = int(goal_ang*rate);
+			for(int i=0; i<ticks; i++)
+			{	
+				ROS_INFO("yawing ke kanan");
+				pub_twist1.publish(yaw);
+				pub_twist2.publish(yaw);
+				m = ' ';
+			}	
+			pub_twist1.publish(hover);
+			pub_twist2.publish(hover);
+			loop_rate.sleep();
 		}
 
 //Perintah untuk naik		
@@ -355,64 +372,77 @@ while (ros::ok())
 //Perintah untuk AR.Drone bergerak lingkaran positif		
 		if(m == 'o')
 		{
-
-		/* 1 radian = 57 derajat
-		 * 1 rad/s = 57 derajat per detik
-		*/	  
-			 
-			lingkar.linear.x = 0.0; // m/s
-			lingkar.angular.z = 0.0; //rad/s  
+			float radius;
+			cout<<"radius = [max 2 meter]";
+			cin>> radius;
+			lingkar.linear.x = lin_speed; // m/s
+			lingkar.angular.z = ang_speed/radius; //rad/s  
+			ticks = int(goal_ang*rate);
 			ROS_INFO("lingkar cw");
-			for(iterasi = 0; iterasi<=10); iterasi +=1)
+			for(int i = 0; i<ticks); i++)
 			{
-				lingkar.linear.x = 0.2;
-				lingkar.angular.z = (lingkar.linear.x/radius) ;
 				pub_twist1.publish(lingkar);
 				pub_twist2.publish(lingkar);
 				m = ' ';	
 			} 
+			pub_twist1.publish(hover);
+			pub_twist2.publish(hover);
+			loop_rate.sleep();
 		}
 
 //Perintah untuk menggerakkan AR.Drone negatif. Negatif bukan menandakan besaran tapi arah		
 		if(m == 'p' )
 		{
-			lingkar_neg.linear.x = 0.0;
-			lingkar_neg.angular.z = 0.0;
-			ROS_INFO("lingkar ccw");
-			for(iterasi=0; iterasi<=10; iterasi +=1)
+			float radius;
+			cout<<"radius = [1 meter aja biar ga lebar-lebar banget]";
+			cin>> radius;
+			
+			lingkar.linear.x = lin_speed; // m/s
+			lingkar.angular.z = -(ang_speed/radius); //rad/s  
+			ticks = int(goal_ang*rate);
+			ROS_INFO("lingkar cw");
+			for(int i = 0; i<ticks); i++)
 			{
-				lingkar_neg.linear.x = 0.2;  //kecepatan linearnya
-				lingkar_neg.angular.z = -((lingkar.linear.x)/radius); //kecepatan angular
-				pub_twist1.publish(lingkar_neg);
-				pub_twist2.publish(lingkar_neg);
-				m = ' ';
-			}				
+				pub_twist1.publish(lingkar);
+				pub_twist2.publish(lingkar);
+				m = ' ';	
+			} 
+			pub_twist1.publish(hover);
+			pub_twist2.publish(hover);
+			loop_rate.sleep();
 		}
 
 //Masuk ke perintah membentuk angka delapan		
 		if(m =='v')
 		{	
-			iterasi = 0;		
-			lingkar.linear.x = 0.0;
-			lingkar.angular.z = 0.0;
-			ROS_INFO("angka delapan");
-			for(iterasi=0; iterasi<=10); iterasi +=1)
+			float radius;
+			cout<<"radius = [max 2 meter]";
+			cin>> radius;
+			
+			lingkar.linear.x = lin_speed; // m/s
+			lingkar.angular.z = ang_speed/radius; //rad/s  
+			int ticks = int(goal_ang*rate);
+			for(int i = 0; i<ticks); i++)
 			{
-				lingkar.linear.x = 0.2;
-				lingkar.angular.z = ((lingkar.linear.x)/radius);
 				pub_twist1.publish(lingkar);
 				pub_twist2.publish(lingkar);
 				m = ' ';	
-			}
-			cout<<"iterasi = "<<iterasi;
-			for(iterasi=10; iterasi>=0; iterasi -=1)
+			} 
+			pub_twist1.publish(hover);
+			pub_twist2.publish(hover);
+			loop_rate.sleep();
+			
+			lingkar.linear.x = lin_speed; // m/s
+			lingkar.angular.z = -ang_speed/radius; //rad/s  
+			for(int i = 0; i<ticks); i++)
 			{
-				lingkar_neg.linear.x = 0.2;
-				lingkar_neg.angular.z = -((lingkar.linear.x)/radius);
-				pub_twist1.publish(lingkar_neg);
-				pub_twist2.publish(lingkar_neg);
-				m = ' ';
-			}			
+				pub_twist1.publish(lingkar);
+				pub_twist2.publish(lingkar);
+				m = ' ';	
+			} 
+			pub_twist1.publish(hover);
+			pub_twist2.publish(hover);
+			loop_rate.sleep();
 		}
 		
 //Jika tidak ada satu karakter yang sesuai maka "perintah tidak ditemukan" keluar		
@@ -420,14 +450,12 @@ while (ros::ok())
 		{
 			ROS_INFO("perintah tidak ditemukan");
 			m = ' ';	
-
 		}
 
 //di sini perintah halted		
 	printf(" \n");	
 	ros::spinOnce();
 	loop_rate.sleep();
-
 }//ros::ok
 
 }//main
