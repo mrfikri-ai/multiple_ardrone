@@ -54,11 +54,11 @@ m = getche();
 
 int main(int argc, char** argv)
 {
-
-    ROS_INFO("ARdrone Test Back and Forth Starting");
-    ros::init(argc, argv,"ARDrone_test");
-    ros::NodeHandle node;
-    ros::Rate loop_rate(50);
+	int rate;
+	ROS_INFO("ARdrone Test Back and Forth Starting");
+	ros::init(argc, argv,"ARDrone_test");
+	ros::NodeHandle node;
+	ros::Rate loop_rate(rate);
 
 //defini buat memanggil instruksi cmd_vel dan Empty
 	ros::Publisher pub_empty_land1;
@@ -255,7 +255,7 @@ while (ros::ok())
 		if(m == 'a')
 		{
 			ROS_INFO("Kiri");
-			kiri.linear.y = 0.1;
+			kiri.linear.y += 0.2;
 			pub_twist1.publish(kiri);
 			pub_twist2.publish(kiri);
 			m = ' ';
@@ -265,7 +265,7 @@ while (ros::ok())
 		if(m == 'd')
 		{
 			ROS_INFO("kanan");
-			kanan.linear.y = -0.1;
+			kanan.linear.y -= 0.2;
 			pub_twist1.publish(kanan);
 			pub_twist2.publish(kanan);
 			m = ' ';
@@ -283,10 +283,10 @@ while (ros::ok())
 //Perintah untuk maju		
 		if(m == 'w' )
 		{
-			lurus.linear.x = lin_speed;
-			int ticks = int(lin_duration*loop_rate);
+			int ticks = int(lin_duration*5*rate);
 			for(int i=0; i<ticks; i++)
 			{
+				lurus.linear.x += lin_speed;
 				ROS_INFO("maju");
 				pub_twist1.publish(lurus);
 				pub_twist2.publish(lurus);
@@ -300,10 +300,10 @@ while (ros::ok())
 //Perintah untuk mundur		
 		if(m == 's')
 		{
-			mundur.linear.x = -lin_speed;
-			int ticks = int(lin_duration*loop_rate);
+			int ticks = int(lin_duration*5*rate);
 			for(int i = 0; i<ticks; i++)
 			{
+				mundur.linear.x -= lin_speed;
 				ROS_INFO("mundur");
 				pub_twist1.publish(mundur);
 				pub_twist2.publish(mundur);
@@ -317,10 +317,10 @@ while (ros::ok())
 //Perintah yawing ke kanan		
 		if(m == 'q' )
 		{
-			rotasi.angular.z = ang_speed;
-			int ticks = int(goal_ang*rate);
+			int ticks = int(durasi*5*rate);
 			for(int i=0; i<ticks; i++)
 			{	
+				rotasi.angular.z += ang_speed;
 				ROS_INFO("yawing ke kanan");
 				pub_twist1.publish(rotasi);
 				pub_twist2.publish(rotasi);
@@ -335,10 +335,10 @@ while (ros::ok())
 //Perintah untuk yawing ke kiri		
 		if(m == 'e' )
 		{
-			yaw.angular.z = -ang_speed;
-			int ticks = int(goal_ang*rate);
+			int ticks = int(durasi*5*rate);
 			for(int i=0; i<ticks; i++)
 			{	
+				yaw.angular.z -= ang_speed;
 				ROS_INFO("yawing ke kanan");
 				pub_twist1.publish(yaw);
 				pub_twist2.publish(yaw);
@@ -372,15 +372,12 @@ while (ros::ok())
 //Perintah untuk AR.Drone bergerak lingkaran positif		
 		if(m == 'o')
 		{
-			float radius;
-			cout<<"radius = [max 2 meter]";
-			cin>> radius;
-			lingkar.linear.x = lin_speed; // m/s
-			lingkar.angular.z = ang_speed/radius; //rad/s  
-			ticks = int(goal_ang*rate);
+			int ticks = int(durasi*5*rate);
 			ROS_INFO("lingkar cw");
-			for(int i = 0; i<ticks); i++)
+			for(int i = 0; i<ticks; i++)
 			{
+				lingkar.linear.x += lin_speed; // m/s
+				lingkar.angular.z += ang_speed/radius; //rad/s  
 				pub_twist1.publish(lingkar);
 				pub_twist2.publish(lingkar);
 				m = ' ';	
@@ -393,16 +390,12 @@ while (ros::ok())
 //Perintah untuk menggerakkan AR.Drone negatif. Negatif bukan menandakan besaran tapi arah		
 		if(m == 'p' )
 		{
-			float radius;
-			cout<<"radius = [1 meter aja biar ga lebar-lebar banget]";
-			cin>> radius;
-			
-			lingkar.linear.x = lin_speed; // m/s
-			lingkar.angular.z = -(ang_speed/radius); //rad/s  
-			ticks = int(goal_ang*rate);
+			int ticks = int(durasi*5*rate);
 			ROS_INFO("lingkar cw");
-			for(int i = 0; i<ticks); i++)
+			for(int i = 0; i<ticks; i++)
 			{
+				lingkar.linear.x = lin_speed; // m/s
+				lingkar.angular.z -= (ang_speed/radius); //rad/s  
 				pub_twist1.publish(lingkar);
 				pub_twist2.publish(lingkar);
 				m = ' ';	
@@ -415,15 +408,11 @@ while (ros::ok())
 //Masuk ke perintah membentuk angka delapan		
 		if(m =='v')
 		{	
-			float radius;
-			cout<<"radius = [max 2 meter]";
-			cin>> radius;
-			
-			lingkar.linear.x = lin_speed; // m/s
-			lingkar.angular.z = ang_speed/radius; //rad/s  
-			int ticks = int(goal_ang*rate);
-			for(int i = 0; i<ticks); i++)
+			int ticks = int(durasi*5*rate);
+			for(int i = 0; i<ticks; i++)
 			{
+				lingkar.linear.x += lin_speed; // m/s
+				lingkar.angular.z += ang_speed/radius; //rad/s  
 				pub_twist1.publish(lingkar);
 				pub_twist2.publish(lingkar);
 				m = ' ';	
@@ -432,10 +421,10 @@ while (ros::ok())
 			pub_twist2.publish(hover);
 			loop_rate.sleep();
 			
-			lingkar.linear.x = lin_speed; // m/s
-			lingkar.angular.z = -ang_speed/radius; //rad/s  
-			for(int i = 0; i<ticks); i++)
+			for(int i = 0; i<ticks; i++)
 			{
+				lingkar.linear.x += lin_speed; // m/s
+				lingkar.angular.z = -ang_speed/radius; //rad/s  
 				pub_twist1.publish(lingkar);
 				pub_twist2.publish(lingkar);
 				m = ' ';	
