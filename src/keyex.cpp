@@ -54,11 +54,11 @@ m = getche();
 
 int main(int argc, char** argv)
 {
-	int rate;
+	float not_rate =0.2;
 	ROS_INFO("ARdrone Test Back and Forth Starting");
 	ros::init(argc, argv,"ARDrone_test");
 	ros::NodeHandle node;
-	ros::Rate loop_rate(rate);
+	ros::Rate loop_rate(50);
 
 //defini buat memanggil instruksi cmd_vel dan Empty
 	ros::Publisher pub_empty_land1;
@@ -294,7 +294,7 @@ while (ros::ok())
 			}
 		pub_twist1.publish(hover);
 		pub_twist2.publish(hover);
-		loop_rate.sleep();
+		not_rate.sleep();
 		}
 
 //Perintah untuk mundur		
@@ -311,7 +311,7 @@ while (ros::ok())
 			}
 			pub_twist1.publish(hover);
 			pub_twist2.publish(hover);	
-			loop_rate.sleep();
+			not_rate.sleep();
 		}
 
 //Perintah yawing ke kanan		
@@ -328,7 +328,7 @@ while (ros::ok())
 			}	
 			pub_twist1.publish(hover);
 			pub_twist2.publish(hover);
-			loop_rate.sleep();
+			not_rate.sleep();
 			
 		}
 
@@ -346,7 +346,7 @@ while (ros::ok())
 			}	
 			pub_twist1.publish(hover);
 			pub_twist2.publish(hover);
-			loop_rate.sleep();
+			not_rate.sleep();
 		}
 
 //Perintah untuk naik		
@@ -384,7 +384,7 @@ while (ros::ok())
 			} 
 			pub_twist1.publish(hover);
 			pub_twist2.publish(hover);
-			loop_rate.sleep();
+			not_rate.sleep();
 		}
 
 //Perintah untuk menggerakkan AR.Drone negatif. Negatif bukan menandakan besaran tapi arah		
@@ -402,7 +402,7 @@ while (ros::ok())
 			} 
 			pub_twist1.publish(hover);
 			pub_twist2.publish(hover);
-			loop_rate.sleep();
+			not_rate.sleep();
 		}
 
 //Masuk ke perintah membentuk angka delapan		
@@ -419,7 +419,7 @@ while (ros::ok())
 			} 
 			pub_twist1.publish(hover);
 			pub_twist2.publish(hover);
-			loop_rate.sleep();
+			not_rate.sleep();
 			
 			for(int i = 0; i<ticks; i++)
 			{
@@ -431,7 +431,7 @@ while (ros::ok())
 			} 
 			pub_twist1.publish(hover);
 			pub_twist2.publish(hover);
-			loop_rate.sleep();
+			not_rate.sleep();
 		}
 		
 //Jika tidak ada satu karakter yang sesuai maka "perintah tidak ditemukan" keluar		
