@@ -181,14 +181,18 @@ int main(int argc, char** argv)
 
 // kecepatan linearnya 0.2 m/s
 float pi = 3.1415;
+
+//linear speednya 0.2 m/s
 float lin_speed = 0.2;
-float goal_lin;
-cout<<"jarak yang ingin ditempuh =";
-cin>> goal_lin;
+
+//tujuan yang ingin dicapai 1 meter
+float goal_lin = 1.0;
+
+//cout<<"jarak yang ingin ditempuh =";
+//cin>> goal_lin;
 
 // waktu yang ditempuh untuk jarak x meter
 float lin_duration = goal_lin/lin_speed;
-
 // menentukan kecepatan angular 1 radian per detik
 float ang_speed = 1.0;	
 // goal dari 1 lingkaran itu 1 pi
@@ -292,9 +296,6 @@ while (ros::ok())
 				pub_twist2.publish(lurus);
 				m = ' ';
 			}
-		pub_twist1.publish(hover);
-		pub_twist2.publish(hover);
-		not_rate.sleep();
 		}
 
 //Perintah untuk mundur		
@@ -309,9 +310,6 @@ while (ros::ok())
 				pub_twist2.publish(mundur);
 				m = ' ';
 			}
-			pub_twist1.publish(hover);
-			pub_twist2.publish(hover);	
-			not_rate.sleep();
 		}
 
 //Perintah yawing ke kanan		
@@ -326,10 +324,6 @@ while (ros::ok())
 				pub_twist2.publish(rotasi);
 				m = ' ';
 			}	
-			pub_twist1.publish(hover);
-			pub_twist2.publish(hover);
-			not_rate.sleep();
-			
 		}
 
 //Perintah untuk yawing ke kiri		
@@ -344,9 +338,7 @@ while (ros::ok())
 				pub_twist2.publish(yaw);
 				m = ' ';
 			}	
-			pub_twist1.publish(hover);
-			pub_twist2.publish(hover);
-			not_rate.sleep();
+		
 		}
 
 //Perintah untuk naik		
@@ -382,9 +374,7 @@ while (ros::ok())
 				pub_twist2.publish(lingkar);
 				m = ' ';	
 			} 
-			pub_twist1.publish(hover);
-			pub_twist2.publish(hover);
-			not_rate.sleep();
+		
 		}
 
 //Perintah untuk menggerakkan AR.Drone negatif. Negatif bukan menandakan besaran tapi arah		
@@ -400,9 +390,6 @@ while (ros::ok())
 				pub_twist2.publish(lingkar);
 				m = ' ';	
 			} 
-			pub_twist1.publish(hover);
-			pub_twist2.publish(hover);
-			not_rate.sleep();
 		}
 
 //Masuk ke perintah membentuk angka delapan		
@@ -417,10 +404,7 @@ while (ros::ok())
 				pub_twist2.publish(lingkar);
 				m = ' ';	
 			} 
-			pub_twist1.publish(hover);
-			pub_twist2.publish(hover);
-			not_rate.sleep();
-			
+		
 			for(int i = 0; i<ticks; i++)
 			{
 				lingkar.linear.x += lin_speed; // m/s
@@ -429,9 +413,7 @@ while (ros::ok())
 				pub_twist2.publish(lingkar);
 				m = ' ';	
 			} 
-			pub_twist1.publish(hover);
-			pub_twist2.publish(hover);
-			not_rate.sleep();
+		
 		}
 		
 //Jika tidak ada satu karakter yang sesuai maka "perintah tidak ditemukan" keluar		
