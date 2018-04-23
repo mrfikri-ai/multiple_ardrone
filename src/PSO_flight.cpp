@@ -1,10 +1,4 @@
-/*  Program two ardrones
- *  Muhamad Rausyan Fikri - UGM 
- *
- *  Elins research group
- *  AR.Drone flight with Particle swarm optimization algorithm
- *  PSO_flight.cpp
- */
+
  
  #include <ros/ros.h>
  #include <std_msgs/Empty.h>
